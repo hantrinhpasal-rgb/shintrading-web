@@ -1,0 +1,39 @@
+name: Daily Blog Update
+
+on:
+  schedule:
+    # Chạy vào lúc 03:00 UTC mỗi ngày (khoảng 10:00 sáng giờ Việt Nam)
+    - cron: '0 3 * * *'
+  workflow_dispatch: # Cho phép kích hoạt thủ công từ giao diện GitHub
+
+jobs:
+  update-blog:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write # Quyền ghi để push các thay đổi
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2 # Checkout using v2 for better compatibility in some cases, or v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          pip install requests
+
+      - name: Fetch and Update Blog News
+        run: |
+          python scripts/update_news.py
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add data/posts.json
+          # Commit only if there are changes
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update blog with latest Binance news" && git push)
