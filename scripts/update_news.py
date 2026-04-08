@@ -92,10 +92,14 @@ def update_posts():
             print(f"Skipped (already exists): {formatted['title']}")
 
     if new_posts_added > 0:
-        # Save back to file
-        with open(POSTS_FILE, 'w', encoding='utf-8') as f:
-            json.dump(posts, f, ensure_ascii=False, indent=4)
-        print(f"Successfully updated {POSTS_FILE} with {new_posts_added} new posts.")
+        # Basic validation: ensure posts is a list and has content
+        if isinstance(posts, list) and len(posts) > 0:
+            # Save back to file
+            with open(POSTS_FILE, 'w', encoding='utf-8') as f:
+                json.dump(posts, f, ensure_ascii=False, indent=4)
+            print(f"Successfully updated {POSTS_FILE} with {new_posts_added} new posts.")
+        else:
+            print("Error: posts data is invalid or empty, skipping write.")
     else:
         print("No new unique posts found.")
 

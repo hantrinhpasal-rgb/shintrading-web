@@ -2,8 +2,9 @@ name: Daily Blog Update
 
 on:
   schedule:
-    # Chạy vào lúc 03:00 UTC mỗi ngày (khoảng 10:00 sáng giờ Việt Nam)
+    # Chạy vào lúc 03:00 và 07:00 UTC mỗi ngày (10 sáng và 2 chiều giờ VN)
     - cron: '0 3 * * *'
+    - cron: '0 7 * * *'
   workflow_dispatch: # Cho phép kích hoạt thủ công từ giao diện GitHub
 
 jobs:
